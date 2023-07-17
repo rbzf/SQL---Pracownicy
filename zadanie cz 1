@@ -1,1 +1,24 @@
-
+CREATE DATABASE pracownicy CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+CREATE TABLE pracownik (
+id INT PRIMARY KEY AUTO_INCREMENT,
+imie VARCHAR(30) NOT NULL, 
+nazwisko VARCHAR(40) NOT NULL, 
+wyplata DECIMAL(6) NOT NULL, 
+data_urodzenia DATE NOT NULL, 
+stanowisko VARCHAR(30) NOT NULL);
+INSERT INTO pracownik (imie, nazwisko, wyplata, data_urodzenia, stanowisko)
+	VALUES 
+		('Jacek', 'Placek', 6000, '1989-11-11', 'kierownik dzialu'),
+        ('Stefan', 'Burczymucha', 4500, '2001-01-25', 'magazynier'),
+        ('Tomasz', 'Paluch', 5400, '2000-02-12', 'starszy magazynier'),
+        ('Zofia', 'Dratewka', 5700, '1999-03-14', 'ksiegowa'),
+        ('Wiktor', 'Samochwala', 4700, '1985-10-25', 'konserwator'),
+        ('Szymon', 'Dratewka', 5400, '1995-04-07', 'starszy magazynier');
+SELECT * FROM pracownik ORDER BY nazwisko;   
+SELECT * FROM pracownik WHERE stanowisko = 'starszy magazynier';
+SELECT * FROM pracownik WHERE TIMESTAMPDIFF(year, data_urodzenia, CURDATE()) >=30;
+UPDATE pracownik SET wyplata = wyplata * 1.1 WHERE stanowisko = 'kierownik dzialu';
+SELECT * FROM pracownik WHERE data_urodzenia = (SELECT MAX(data_urodzenia) FROM pracownik);
+SET SQL_SAFE_UPDATES = 0;
+DROP TABLE pracownik;
+SET SQL_SAFE_UPDATES = 1;
