@@ -1,0 +1,45 @@
+CREATE DATABASE pracownicy CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+CREATE TABLE stanowisko (
+id INT PRIMARY KEY AUTO_INCREMENT,
+nazwa_stanowiska VARCHAR(30) NOT NULL UNIQUE,
+opis VARCHAR(200),
+wyplata DECIMAL(6) NOT NULL);
+CREATE TABLE adres (
+id INT PRIMARY KEY AUTO_INCREMENT,
+ulica VARCHAR(50), 
+numer_domu_mieszkania VARCHAR(10),
+kod_pocztowy VARCHAR(6),
+miejscowosc VARCHAR(30));
+CREATE TABLE pracownik (
+id INT PRIMARY KEY AUTO_INCREMENT,
+imie VARCHAR(30) NOT NULL,
+nazwisko VARCHAR(40) NOT NULL,
+id_stanowisko INT NOT NULL,
+id_adres INT,
+FOREIGN KEY (id_stanowisko) REFERENCES stanowisko(id),
+FOREIGN KEY (id_adres) REFERENCES adres(id));
+INSERT INTO adres (ulica, numer_domu_mieszkania, kod_pocztowy, miejscowosc) 
+	VALUES 
+		('Strumykowa', '28 m. 3', '01-138', 'Warszawa'),
+        ('Okopowa', '11A m. 12', '01-221', 'Warszawa'),
+        ('Kwiatowa', '5', '00-165', 'Opoczno'),
+        ('Legionow Polskich', '23', '02-145','Ursus');
+INSERT INTO stanowisko (nazwa_stanowiska, opis, wyplata)
+	VALUES
+		('kierownik dzialu', 'kierownik sredniego szczebla', 6000),
+        ('magazynier', 'pracownik magazynu bez doswiadczenia', 4500),
+        ('starszy magazynier', 'pracownik magazynu z min 2-letnim doswiadczeniem', 4700),
+        ('ksiegowa', 'prowadzenie ksiegowosci dzialu', 5100);
+INSERT INTO pracownik (imie, nazwisko, id_stanowisko, id_adres)  
+	VALUES
+		('Jacek', 'Placek', 1, 1),
+        ('Stefan', 'Burczymucha', 2, 2),
+        ('Tomasz', 'Paluch', 2, 3),
+        ('Zofia', 'Dratewka', 4, 4),
+        ('Szymon', 'Dratewka', 3, 4);
+SELECT imie, nazwisko, nazwa_stanowiska, ulica, numer_domu_mieszkania, kod_pocztowy, miejscowosc FROM pracownik p
+JOIN stanowisko s JOIN adres a ON p.id_stanowisko = s.id AND p.id_adres = a.id;
+SELECT SUM(wyplata) FROM pracownik p
+JOIN stanowisko s ON p.id_stanowisko = s.id;
+SELECT imie, nazwisko, ulica, numer_domu_mieszkania, kod_pocztowy, miejscowosc FROM pracownik p
+JOIN adres a ON p.id_adres = a.id WHERE kod_pocztowy = '02-145';
